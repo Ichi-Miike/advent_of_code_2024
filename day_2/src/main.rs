@@ -4,7 +4,7 @@ use std::path::Path;
 
 fn main() {
     //  Set the filename
-    let filename: &str = "input.txt";
+    let filename: &str = "input2.txt";
 
     //  Clear the screen before we get started
     std::process::Command::new("clear").status().unwrap();
@@ -12,6 +12,7 @@ fn main() {
     //  Get the list of reports from the file and initialize the 'safe_report_count' variable
     let reports: Vec<String> = get_line_array(filename);
     let mut safe_report_count: i32 = 0;
+    let mut failed_report_count: i32 = 0;
 
     //  Loop through the reports pulled from the file
     for report in reports {
@@ -32,26 +33,32 @@ fn main() {
                  }
                  else {
                     suffix = String::from("not safe (failed dampening)");
+                    failed_report_count += 1;
                  }
         }
 
-        println!("{} -> {}", report, suffix);
-
-//        println!("");
+        if suffix.contains("fail") {
+            println!("{} -> {}", report, suffix);
+        }
     }
 
     println!("");
-    println!("Part 1 Answer: {}", safe_report_count);
+    println!("Safe Reports: {}", safe_report_count);
+    println!("Failed Reports: {}", failed_report_count);
     println!("");
 }
 
 fn apply_dampener(arr: Vec<&str>, index: usize) -> bool {
-    println!("Dampening.... Index {}-{}", index, index + 1);
+    //println!("Dampening.... Index {}-{}", index, index + 1);
     let mut test_a: Vec<&str> = arr.clone();
     let mut test_b: Vec<&str> = arr.clone();
+    let mut test_c: Vec<&str> = arr.clone();
 
     test_a.remove(index);
     test_b.remove(index + 1);
+    if index > 0 {
+        test_c.remove(index - 1);
+    }
 
     // println!("Origin -> {}", arr.join(" "));
     // println!("Test A -> {}", test_a.join(" "));
@@ -62,6 +69,10 @@ fn apply_dampener(arr: Vec<&str>, index: usize) -> bool {
     }
 
     if check_if_report_is_safe(test_b).0 {
+        return true;
+    }
+
+    if check_if_report_is_safe(test_c).0 {
         return true;
     }
 
