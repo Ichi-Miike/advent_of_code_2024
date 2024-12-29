@@ -223,8 +223,8 @@ fn get_array_of_lines(input: &str) -> Vec<&str> {
 }
 
 
-fn read_input_file(filename: &str) -> String {
-    let file_contents = fs::read_to_string(filename).expect("Failed to read file");
+    fn read_input_file(filename: &str) -> String {
+        let file_contents = fs::read_to_string(filename).expect("Failed to read file");
 
-    return file_contents;
-}
+        return file_contents;
+    }
